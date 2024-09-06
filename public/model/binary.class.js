@@ -5,13 +5,17 @@ export class binary
         return new Promise((resolve) => {
             resolve(
                 {
-                    body: binary.body(),
-                    option: {
-                        button: binary.button(),
-                    }
+                    body: this.body(),
+                    buttons: this.buttons(this.buttonOption()),
                 }
             )
         });
+    }
+
+    static buttonOption(option = null){
+        return option ?? {
+            height : '4rem'
+        };
     }
 
     static body()
@@ -21,11 +25,14 @@ export class binary
             grid: {
                 cols: 4,
                 gap: '4px'
+            },
+            button: {
+                size: '1rem'
             }
         };
     }
 
-    static button()
+    static buttons(button_option)
     {
         return [
             {
@@ -35,19 +42,20 @@ export class binary
                 value: '1',
             },
             {
-                value: '-',
+                value: 'x',
+            },
+            {
+                value: '=',
+                rows: 2
             },
             {
                 value: '+',
             },
             {
+                value: '-',
+            },
+            {
                 value: '/',
-            },
-            {
-                value: 'x',
-            },
-            {
-                value: '=',
             }
         ];
     }

@@ -60,10 +60,14 @@ class Calculator extends HTMLElement
 	async #getModel(model)
 	{
         try {
-            const module = await import(`../model/${model}.class.js`);
-        
-            const calculator = await module[model].getCalculator();
-            //console.log(calculator);
+            const calculatorModel = await import(`../model/${model}.class.js`);
+            const module = calculatorModel[model];
+            // module.buttonOption({
+            //     height: '7rem'
+            // });
+            const calculator = await module.getCalculator();
+
+            console.log(calculator);
     
             this.#renderCalculator(calculator)
             this.#renderButtons(calculator)
@@ -91,18 +95,23 @@ class Calculator extends HTMLElement
 
     #renderButtons(calculator) {
         const buttonBox = this.shadowRoot.querySelector('.calculator-button-box');
-        const buttons = calculator.option.button;
+        const buttons = calculator.buttons;
+
+        buttonBox.innerHTML = '';
         buttons.forEach(buttonOption => {
             const button = this.#createButton(buttonOption);
             buttonBox.appendChild(button);
-        });pA7zM1QywiyS
+        });
     }
 
     #createButton(buttonOption) {
         const button = document.createElement('button');
+
         button.setAttribute('data-value', buttonOption.value);
         button.textContent = buttonOption.value;
-
+        if(buttonOption.height){
+            button.style.height = `${buttonOption.height}`;
+        }
         if (buttonOption.rows) {
             button.style.gridRow = `span ${buttonOption.rows}`;
         }
@@ -139,6 +148,9 @@ class Calculator extends HTMLElement
                     #padding: 0 0.75rem;
                     box-sizing:border-box;
                 }
+                .calculator-body{
+                    margin-top: 0.5rem;
+                }
             </style>
 
             <section>
@@ -147,9 +159,7 @@ class Calculator extends HTMLElement
                         <input class="calculator-input" type="number"/>
                     </div>
                     <div class="calculator-body">
-                        <div class="calculator-button-box">
-                        
-                        </div>
+                        <div class="calculator-button-box"></div>
                     </div>
                 </div>
                 <div class="options">
