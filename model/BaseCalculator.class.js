@@ -86,7 +86,6 @@ export class BaseCalculator
                 console.error('error operator : ', operator);
                 return '';
         }
-
         return this.formatResult(result);
     }
 
