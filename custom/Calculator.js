@@ -13,11 +13,12 @@ class Calculator extends HTMLElement
 {
     #default_model = 'Decimal';
 
+    #module = '';// init module
+
     #inputValue = ''; // 현재 입력된 값
+    #previousValue = ''; // 이전 값
     #operation = '';  // 연산자
     #previousOperation = '';  // 결과 전 연산자
-    #previousValue = ''; // 이전 값
-    #module = ''; // 이전 값
 
     constructor() 
     {
