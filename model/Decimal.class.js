@@ -5,7 +5,7 @@ export class Decimal extends BaseCalculator
     static body() {
         return {
             ...super.body(),
-            thema: 'black'
+            thema: '#1e1e1e'
         };
     }
 
@@ -17,9 +17,9 @@ export class Decimal extends BaseCalculator
         return this.getButtonList(buttonList);
     }
 
-    static convertCurrentValue(value)
+    static convertCurrentValue(value, number)
     {
-        return parseInt(value, 2).toString(10); // 2진수에서 10진수로 변환
+        return parseInt(value, number).toString(10); // 2진수에서 10진수로 변환
     }
 
     static formatResult(result)

@@ -26,9 +26,9 @@ export class Binary extends BaseCalculator
         return this.getButtonList(buttonList);
     }
 
-    static convertCurrentValue(value)
+    static convertCurrentValue(value, number)
     {
-        return parseInt(value, 10).toString(2); // 10진수에서 2진수로 변환
+        return parseInt(value, number).toString(2); // 10진수에서 2진수로 변환
     }
 
     static parseValue(value)

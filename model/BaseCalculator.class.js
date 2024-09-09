@@ -7,6 +7,11 @@ export class BaseCalculator
         }
     };
 
+    static NUMBER = {
+        Decimal : 10,
+        Binary : 2
+    }
+
     static async getCalculator()
     {
         return new Promise((resolve) => {
@@ -50,12 +55,13 @@ export class BaseCalculator
         }));
     }
 
+    static convertValue(currentValue, number = 'Decimal')
+    {
+        return this.convertCurrentValue(currentValue, this.NUMBER[number]);
+    }
+
     static calculate(currentValue, previousValue = null, operator = null)
     {
-        if (!previousValue && !operator) {
-            return this.convertCurrentValue(currentValue);
-        }
-
         const prev = this.parseValue(previousValue);
         const current = this.parseValue(currentValue);
         let result;
@@ -84,7 +90,7 @@ export class BaseCalculator
         return this.formatResult(result);
     }
 
-    static convertCurrentValue(value)
+    static convertCurrentValue(value, number)
     {
         // 변환 로직을 서브클래스에서 구현
         console.error('error method : convertCurrentValue');

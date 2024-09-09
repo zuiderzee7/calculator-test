@@ -11,7 +11,8 @@ import { Calculator as Template } from '../template/Calculator.class.js';
  */
 class Calculator extends HTMLElement
 {
-    #default_model = 'Decimal';
+    #currentModel = 'Decimal';
+    #previousModel = '';// prev model
 
     #model = '';// init model
 
@@ -30,7 +31,7 @@ class Calculator extends HTMLElement
     connectedCallback()
     {
         this.#render();
-        this.#getModel(this.#default_model);
+        this.#getModel(this.#currentModel);
     }
 
 	disconnectedCallback()
@@ -53,7 +54,8 @@ class Calculator extends HTMLElement
             // 10진수
 			if (node.classList.contains('command-change-decimal'))
             {
-                if(this.#default_model === 'Decimal') return true;
+                if(this.#currentModel === 'Decimal') return true;
+                this.#previousModel = this.#currentModel;
                 this.#getModel('Decimal');
 				return true;
             }
@@ -61,7 +63,8 @@ class Calculator extends HTMLElement
             // 2진수
 			if (node.classList.contains('command-change-binary'))
             {
-                if(this.#default_model === 'Binary') return true;
+                if(this.#currentModel === 'Binary') return true;
+                this.#previousModel = this.#currentModel;
                 this.#getModel('Binary');
 				return true;
             }
@@ -88,7 +91,7 @@ class Calculator extends HTMLElement
 	async #getModel(model)
 	{
         try {
-            this.#default_model = model;
+            this.#currentModel = model;
             const { [model]: calculatorModel } = await import(`/model/${model}.class.js`);
             this.#model = calculatorModel;
 
@@ -97,7 +100,7 @@ class Calculator extends HTMLElement
             this.#renderButtons(calculator);
 
             if(this.#inputValue !== ''){
-                let result = this.#model.calculate(this.#inputValue);
+                let result = this.#model.convertValue(this.#inputValue, this.#previousModel);
                 this.#inputValue = result;
                 this.#updateInput(result);
             }
