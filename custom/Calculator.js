@@ -27,6 +27,17 @@ class Calculator extends HTMLElement
 		this.addEventListener('click', this.#onClick.bind(this));
     }
 
+    connectedCallback()
+    {
+        this.#render();
+        this.#getModel(this.#default_model);
+    }
+
+	disconnectedCallback()
+	{
+		this.removeEventListener('click', this.#onClick);
+	}
+
     #onClick(e)
 	{
 		e.composedPath().find(node =>
@@ -74,28 +85,17 @@ class Calculator extends HTMLElement
 		})
 	}
 
-    connectedCallback()
-    {
-        this.#render();
-        this.#getModel(this.#default_model);
-    }
-
-	disconnectedCallback()
-	{
-		this.removeEventListener('click', this.#onClick);
-	}
-
 	async #getModel(model)
 	{
         try {
             this.#default_model = model;
-            const calculatorModel = await import(`/model/${model}.class.js`);
-            this.#module = calculatorModel[model];
+            const { [model]: calculatorModel } = await import(`/model/${model}.class.js`);
+            this.#module = calculatorModel;
 
             const calculator = await this.#module.getCalculator();
-
             this.#renderCalculator(calculator);
             this.#renderButtons(calculator);
+
             if(this.#inputValue !== ''){
                 let result = this.#module.calculate(this.#inputValue);
                 this.#inputValue = result;
@@ -116,9 +116,7 @@ class Calculator extends HTMLElement
     {
         if (this.#operation) {
             // 새로운 연산을 시작할 때
-            if (!this.#previousValue) {
-                this.#previousValue = this.#inputValue;
-            }
+            if (!this.#previousValue) this.#previousValue = this.#inputValue;
             this.#inputValue = value;
             this.#previousOperation = this.#operation;
             this.#operation = '';
@@ -132,20 +130,19 @@ class Calculator extends HTMLElement
     {
         if (this.#inputValue) {
             this.#operation = operator;
-            this.#updateInput(this.#inputValue + operator);
+            this.#updateInput(`${this.#inputValue}${operator}`);
         }
     }
 
     #calculate()
     {
         if (this.#previousValue && this.#inputValue && this.#previousOperation) {
-            let result = this.#module.calculate(this.#inputValue, this.#previousValue, this.#previousOperation);
-
+            const result = this.#module.calculate(this.#inputValue, this.#previousValue, this.#previousOperation);
             this.#inputValue = result;
-            this.#previousValue = ''; // 이전 값을 초기화
-            this.#operation = '';     // 연산자 초기화
-            this.#previousOperation = ''; // 연산자 초기화
-            this.#updateInput(result); // 결과값 업데이트
+            this.#previousValue = '';
+            this.#operation = '';
+            this.#previousOperation = '';
+            this.#updateInput(result);
         }
     }
 
@@ -168,7 +165,6 @@ class Calculator extends HTMLElement
     {
         const calculatorBox = this.shadowRoot.querySelector('.calculator-box');
         const buttonBox = this.shadowRoot.querySelector('.calculator-button-box');
-
         this.#applyStyles(calculatorBox, buttonBox, calculator);
     }
 
@@ -177,21 +173,16 @@ class Calculator extends HTMLElement
         calculatorBox.style.backgroundColor = `${calculator.body.thema ?? '#fff'}`;
         buttonBox.style.display = 'grid';
         buttonBox.style.gridTemplateColumns = `repeat(${calculator.body.grid.cols ?? 4}, 1fr)`;
-
-        if (calculator.body.grid.gap) {
-            buttonBox.style.gridGap = calculator.body.grid.gap;
-        }
+        buttonBox.style.gridGap = calculator.body.grid.gap ?? '0px';
     }
 
     #renderButtons(calculator)
     {
         const buttonBox = this.shadowRoot.querySelector('.calculator-button-box');
-        const buttons = calculator.buttons;
-
         buttonBox.innerHTML = '';
-        buttons.forEach(buttonOption => {
-            const button = this.#createButton(buttonOption);
-            buttonBox.appendChild(button);
+
+        calculator.buttons.forEach(buttonOption => {
+            buttonBox.appendChild(this.#createButton(buttonOption));
         });
     }
 
@@ -201,7 +192,8 @@ class Calculator extends HTMLElement
 
         button.setAttribute('data-value', buttonOption.value);
         button.textContent = buttonOption.value;
-        button.className = 'command-button'
+        button.className = 'command-button';
+        
         if(buttonOption.height){
             button.style.height = `${buttonOption.height}`;
         }
