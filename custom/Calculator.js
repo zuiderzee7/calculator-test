@@ -45,12 +45,6 @@ class Calculator extends HTMLElement
 		{
 			if (typeof(node.className) === 'object' || !node.className || !node.className.match(/command/)) return false;
 
-            // 로마
-			// if (node.classList.contains('command-model-change-Roman-numeral'))
-			// {
-			// 	return true;
-			// }
-
             // 10진수
 			if (node.classList.contains('command-change-decimal'))
             {
