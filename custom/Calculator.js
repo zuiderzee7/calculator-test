@@ -14,7 +14,7 @@ class Calculator extends HTMLElement
     #currentModel = 'Decimal';
     #previousModel = '';// prev model
 
-    #model = '';// init model
+    #model;// init model
 
     #inputValue = ''; // 현재 입력된 값
     #previousValue = ''; // 이전 값
@@ -31,7 +31,7 @@ class Calculator extends HTMLElement
     connectedCallback()
     {
         this.#render();
-        this.#getModel(this.#currentModel);
+        this.#setModel(this.#currentModel);
     }
 
 	disconnectedCallback()
@@ -50,7 +50,7 @@ class Calculator extends HTMLElement
             {
                 if(this.#currentModel === 'Decimal') return true;
                 this.#previousModel = this.#currentModel;
-                this.#getModel('Decimal');
+                this.#setModel('Decimal');
 				return true;
             }
 
@@ -59,7 +59,7 @@ class Calculator extends HTMLElement
             {
                 if(this.#currentModel === 'Binary') return true;
                 this.#previousModel = this.#currentModel;
-                this.#getModel('Binary');
+                this.#setModel('Binary');
 				return true;
             }
 
@@ -83,7 +83,7 @@ class Calculator extends HTMLElement
 		})
 	}
 
-	async #getModel(model)
+	async #setModel(model)
 	{
         try 
         {
