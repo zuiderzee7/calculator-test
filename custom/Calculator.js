@@ -13,7 +13,7 @@ class Calculator extends HTMLElement
 {
     #default_model = 'Decimal';
 
-    #module = '';// init module
+    #model = '';// init model
 
     #inputValue = ''; // 현재 입력된 값
     #previousValue = ''; // 이전 값
@@ -90,14 +90,14 @@ class Calculator extends HTMLElement
         try {
             this.#default_model = model;
             const { [model]: calculatorModel } = await import(`/model/${model}.class.js`);
-            this.#module = calculatorModel;
+            this.#model = calculatorModel;
 
-            const calculator = await this.#module.getCalculator();
+            const calculator = await this.#model.getCalculator();
             this.#renderCalculator(calculator);
             this.#renderButtons(calculator);
 
             if(this.#inputValue !== ''){
-                let result = this.#module.calculate(this.#inputValue);
+                let result = this.#model.calculate(this.#inputValue);
                 this.#inputValue = result;
                 this.#updateInput(result);
             }
@@ -137,7 +137,7 @@ class Calculator extends HTMLElement
     #calculate()
     {
         if (this.#previousValue && this.#inputValue && this.#previousOperation) {
-            const result = this.#module.calculate(this.#inputValue, this.#previousValue, this.#previousOperation);
+            const result = this.#model.calculate(this.#inputValue, this.#previousValue, this.#previousOperation);
             this.#inputValue = result;
             this.#previousValue = '';
             this.#operation = '';
