@@ -17,7 +17,7 @@ export class Calculator
     {
         return `
             <style>
-                section {
+                main {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
@@ -74,7 +74,7 @@ export class Calculator
                 }
             </style>
 
-            <section>
+            <main>
                 <div class="calculator-box">
                     <div class="calculator-input-box">
                         <input class="calculator-input" type="text" readonly/>
@@ -87,7 +87,7 @@ export class Calculator
                     <button type="button" class="command-change-binary">2진수</button>
                     <button type="button" class="command-change-decimal">10진수</button>
                 </div>
-            </section>
+            </main>
         `;
     }
 }
