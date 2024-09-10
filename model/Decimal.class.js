@@ -5,7 +5,11 @@ export class Decimal extends BaseCalculator
     static body() {
         return {
             ...super.body(),
-            thema: '#1e1e1e'
+            thema: '#1e1e1e',
+            /* grid: {
+                cols: 4,
+                gap: '4px'
+            }, */
         };
     }
 

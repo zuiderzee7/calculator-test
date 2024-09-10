@@ -1,8 +1,10 @@
 const DEFAULT_THEME = {
-    backgroundColor: '#fff',
+    backgroundColor: '#000',
     buttonColor: '#000000',
     inputHeight: '2.5rem',
-    padding: '0 0.75rem'
+    padding: '0 0.75rem',
+    gridCols: 4,
+    gridGap: '4px',
 };
 
 export class Calculator
@@ -10,7 +12,7 @@ export class Calculator
     static #instance;
     constructor(theme = DEFAULT_THEME) 
     {
-        if (Calculator.#instance) 
+        if (Calculator.#instance)
         {
             return Calculator.#instance;
         }
@@ -19,12 +21,23 @@ export class Calculator
         Calculator.#instance = this;
     }
 
-    #applyTheme({ backgroundColor, buttonColor, inputHeight, padding }) 
+    #applyTheme(theme = {})
     {
-        this.backgroundColor = backgroundColor || DEFAULT_THEME.backgroundColor;
-        this.buttonColor = buttonColor || DEFAULT_THEME.buttonColor;
-        this.inputHeight = inputHeight || DEFAULT_THEME.inputHeight;
-        this.padding = padding || DEFAULT_THEME.padding;
+        const {
+            backgroundColor,
+            buttonColor,
+            inputHeight,
+            padding,
+            gridCols,
+            gridGap
+        } = theme;
+        
+        if (backgroundColor !== undefined) this.backgroundColor = backgroundColor;
+        if (buttonColor !== undefined) this.buttonColor = buttonColor;
+        if (inputHeight !== undefined) this.inputHeight = inputHeight;
+        if (padding !== undefined) this.padding = padding;
+        if (gridCols !== undefined) this.gridCols = gridCols;
+        if (gridGap !== undefined) this.gridGap = gridGap;
     }
 
     applyStyles(calculatorBox, buttonBox, calculatorModel)
@@ -33,8 +46,8 @@ export class Calculator
 
         calculatorBox.style.backgroundColor = `${thema ?? this.backgroundColor}`;
         buttonBox.style.display = 'grid';
-        buttonBox.style.gridTemplateColumns = `repeat(${grid.cols ?? 4}, 1fr)`;
-        buttonBox.style.gridGap = `${grid.gap ?? '0px'}`;
+        buttonBox.style.gridTemplateColumns = `repeat(${grid.cols ?? this.gridCols}, 1fr)`;
+        buttonBox.style.gridGap = `${grid.gap ?? this.gridGap}`;
     }
 
     getTemplate()
@@ -108,8 +121,9 @@ export class Calculator
                     </div>
                 </div>
                 <div class="options">
-                    <button type="button" class="command-change-binary">2진수</button>
-                    <button type="button" class="command-change-decimal">10진수</button>
+                    <button type="button" class="command-model-change" data-model="binary">2진수</button>
+                    <button type="button" class="command-model-change" data-model="Decimal">10진수</button>
+                    <!-- <button type="button" class="command-change-decimal">10진수</button> -->
                 </div>
             </main>
         `;

@@ -40,20 +40,20 @@ class Calculator extends HTMLElement
 			if (typeof(node.className) === 'object' || !node.className || !node.className.match(/command/)) return false;
 
             // 10진수
-			if (node.classList.contains('command-change-decimal'))
-            {
-                if(this.#currentModel === 'Decimal') return true;
-                this.#previousModel = this.#currentModel;
-                this.#setModel('Decimal');
-				return true;
-            }
+			// if (node.classList.contains('command-change-decimal'))
+            // {
+            //     if(this.#currentModel === 'Decimal') return true;
+            //     this.#previousModel = this.#currentModel;
+            //     this.#setModel('Decimal');
+			// 	return true;
+            // }
 
-            // 2진수
-			if (node.classList.contains('command-change-binary'))
+			if (node.classList.contains('command-model-change'))
             {
-                if(this.#currentModel === 'Binary') return true;
+                const dataModel = node.getAttribute('data-model').replace(/\b\w/, (match) => match.toUpperCase());
+                if(this.#currentModel === dataModel) return true;
                 this.#previousModel = this.#currentModel;
-                this.#setModel('Binary');
+                this.#setModel(dataModel);
 				return true;
             }
 
