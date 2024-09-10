@@ -30,7 +30,6 @@ export class BaseCalculator
     static body()
     {
         return {
-            thema: 'black', // 기본 테마
             grid: {
                 cols: 4,
                 gap: '4px'

@@ -1,4 +1,4 @@
-const DEFAULT_THEME = {
+const DEFAULT = {
     backgroundColor: '#000',
     buttonColor: '#000000',
     inputHeight: '2.5rem',
@@ -10,7 +10,7 @@ const DEFAULT_THEME = {
 export class Calculator
 {
     static #instance;
-    constructor(theme = DEFAULT_THEME) 
+    constructor(theme = DEFAULT) 
     {
         if (Calculator.#instance)
         {
@@ -23,6 +23,9 @@ export class Calculator
 
     #applyTheme(theme = {})
     {
+        Object.assign(this, theme);
+
+        /* 
         const {
             backgroundColor,
             buttonColor,
@@ -38,6 +41,7 @@ export class Calculator
         if (padding !== undefined) this.padding = padding;
         if (gridCols !== undefined) this.gridCols = gridCols;
         if (gridGap !== undefined) this.gridGap = gridGap;
+         */
     }
 
     applyStyles(calculatorBox, buttonBox, calculatorModel)
@@ -114,7 +118,7 @@ export class Calculator
             <main>
                 <div class="calculator-box">
                     <div class="calculator-input-box">
-                        <input class="calculator-input" type="text" readonly/>
+                        <input class="calculator-input" name="cal" type="text" readonly/>
                     </div>
                     <div class="calculator-body">
                         <div class="calculator-button-box"></div>
