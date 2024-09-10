@@ -1,20 +1,13 @@
 import { Calculator as Template } from '../template/Calculator.class.js';
-/**
- * 계산기
- * 기능 : 2진법, 10진법 연산 처리 및 결과값 변환
- *
- *
- * model
- * 인터페이스 구현?
- * 모델 내 버튼의 형태와 위치 처리 값(숫자, 연산자 등)
- * 모델 변환하여 다른 방식?
- */
+
 class Calculator extends HTMLElement
 {
+
+    #template;
+
+    #model;
     #currentModel = 'Decimal';
     #previousModel = '';// prev model
-
-    #model;// init model
 
     #inputValue = ''; // 현재 입력된 값
     #previousValue = ''; // 이전 값
@@ -25,6 +18,7 @@ class Calculator extends HTMLElement
     {
         super();
         this.attachShadow({ mode: 'open' });
+        this.#template = new Template();
 		this.addEventListener('click', this.#onClick.bind(this));
     }
 
@@ -88,12 +82,12 @@ class Calculator extends HTMLElement
         try 
         {
             this.#currentModel = model;
-            const { [model]: calculatorModel } = await import(`/model/${model}.class.js`);
-            this.#model = calculatorModel;
+            const { [model]: Model } = await import(`/model/${model}.class.js`);
+            this.#model = Model;
 
-            const calculator = await this.#model.getCalculator();
-            this.#renderCalculator(calculator);
-            this.#renderButtons(calculator.buttons);
+            const calculatorModel = await this.#model.getCalculator();
+            this.#renderCalculator(calculatorModel);
+            this.#renderButtons(calculatorModel);
 
             if(this.#inputValue !== ''){
                 let result = this.#model.convertValue(this.#inputValue, this.#previousModel);
@@ -167,24 +161,15 @@ class Calculator extends HTMLElement
         this.#updateInput(this.#inputValue);
     }
 
-    #renderCalculator(calculator)
+    #renderCalculator(calculatorModel)
     {
         const calculatorBox = this.shadowRoot.querySelector('.calculator-box');
         const buttonBox = this.shadowRoot.querySelector('.calculator-button-box');
-        const { thema, grid } = calculator.body;
 
-        this.#applyStyles(calculatorBox, buttonBox, thema, grid.cols, grid.gap);
+        this.#template.applyStyles(calculatorBox, buttonBox, calculatorModel);
     }
 
-    #applyStyles(calculatorBox, buttonBox, thema = '#fff', gridCols = 4, gridGap = '0px')
-    {
-        calculatorBox.style.backgroundColor = `${thema}`;
-        buttonBox.style.display = 'grid';
-        buttonBox.style.gridTemplateColumns = `repeat(${gridCols}, 1fr)`;
-        buttonBox.style.gridGap = gridGap;
-    }
-
-    #renderButtons(buttons)
+    #renderButtons({buttons})
     {
         const buttonBox = this.shadowRoot.querySelector('.calculator-button-box');
         buttonBox.innerHTML = '';
@@ -210,8 +195,7 @@ class Calculator extends HTMLElement
 
 	#render()
 	{
-        const template = new Template();
-        this.shadowRoot.innerHTML = template.getTemplate();
+        this.shadowRoot.innerHTML = this.#template.getTemplate();
 	}
 }
 

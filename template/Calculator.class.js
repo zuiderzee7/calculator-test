@@ -1,5 +1,5 @@
 const DEFAULT_THEME = {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#fff',
     buttonColor: '#000000',
     inputHeight: '2.5rem',
     padding: '0 0.75rem'
@@ -27,15 +27,14 @@ export class Calculator
         this.padding = padding || DEFAULT_THEME.padding;
     }
 
-    applyStyles(calculator)
+    applyStyles(calculatorBox, buttonBox, calculatorModel)
     {
-        const calculatorBox = this.shadowRoot.querySelector('.calculator-box');
-        const buttonBox = this.shadowRoot.querySelector('.calculator-button-box');
+        const { thema, grid } = calculatorModel.body;
 
-        calculatorBox.style.backgroundColor = `${calculator.body.thema ?? '#fff'}`;
+        calculatorBox.style.backgroundColor = `${thema ?? this.backgroundColor}`;
         buttonBox.style.display = 'grid';
-        buttonBox.style.gridTemplateColumns = `repeat(${gridCols}, 1fr)`;
-        buttonBox.style.gridGap = gridGap;
+        buttonBox.style.gridTemplateColumns = `repeat(${grid.cols ?? 4}, 1fr)`;
+        buttonBox.style.gridGap = `${grid.gap ?? '0px'}`;
     }
 
     getTemplate()
