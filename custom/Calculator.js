@@ -2,7 +2,6 @@ import { Calculator as Template } from '../template/Calculator.class.js';
 
 class Calculator extends HTMLElement
 {
-
     #template;
 
     #model;
