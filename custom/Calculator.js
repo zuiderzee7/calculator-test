@@ -93,7 +93,7 @@ class Calculator extends HTMLElement
 
             const calculator = await this.#model.getCalculator();
             this.#renderCalculator(calculator);
-            this.#renderButtons(calculator);
+            this.#renderButtons(calculator.buttons);
 
             if(this.#inputValue !== ''){
                 let result = this.#model.convertValue(this.#inputValue, this.#previousModel);
@@ -171,23 +171,25 @@ class Calculator extends HTMLElement
     {
         const calculatorBox = this.shadowRoot.querySelector('.calculator-box');
         const buttonBox = this.shadowRoot.querySelector('.calculator-button-box');
-        this.#applyStyles(calculatorBox, buttonBox, calculator);
+        const { thema, grid } = calculator.body;
+
+        this.#applyStyles(calculatorBox, buttonBox, thema, grid.cols, grid.gap);
     }
 
-    #applyStyles(calculatorBox, buttonBox, calculator)
+    #applyStyles(calculatorBox, buttonBox, thema = '#fff', gridCols = 4, gridGap = '0px')
     {
-        calculatorBox.style.backgroundColor = `${calculator.body.thema ?? '#fff'}`;
+        calculatorBox.style.backgroundColor = `${thema}`;
         buttonBox.style.display = 'grid';
-        buttonBox.style.gridTemplateColumns = `repeat(${calculator.body.grid.cols ?? 4}, 1fr)`;
-        buttonBox.style.gridGap = calculator.body.grid.gap ?? '0px';
+        buttonBox.style.gridTemplateColumns = `repeat(${gridCols}, 1fr)`;
+        buttonBox.style.gridGap = gridGap;
     }
 
-    #renderButtons(calculator)
+    #renderButtons(buttons)
     {
         const buttonBox = this.shadowRoot.querySelector('.calculator-button-box');
         buttonBox.innerHTML = '';
 
-        calculator.buttons.forEach(buttonOption => {
+        buttons.forEach(buttonOption => {
             buttonBox.appendChild(this.#createButton(buttonOption));
         });
     }

@@ -1,16 +1,41 @@
+const DEFAULT_THEME = {
+    backgroundColor: '#ffffff',
+    buttonColor: '#000000',
+    inputHeight: '2.5rem',
+    padding: '0 0.75rem'
+};
+
 export class Calculator
 {
-    constructor(
+    static #instance;
+    constructor(theme = DEFAULT_THEME) 
     {
-        backgroundColor = '#ffffff',
-        buttonColor = '#000000',
-        inputHeight = '2.5rem',
-        padding = '0 0.75rem'
-    } = {}) {
-        this.backgroundColor = backgroundColor;
-        this.buttonColor = buttonColor;
-        this.inputHeight = inputHeight;
-        this.padding = padding;
+        if (Calculator.#instance) 
+        {
+            return Calculator.#instance;
+        }
+
+        this.#applyTheme(theme);
+        Calculator.#instance = this;
+    }
+
+    #applyTheme({ backgroundColor, buttonColor, inputHeight, padding }) 
+    {
+        this.backgroundColor = backgroundColor || DEFAULT_THEME.backgroundColor;
+        this.buttonColor = buttonColor || DEFAULT_THEME.buttonColor;
+        this.inputHeight = inputHeight || DEFAULT_THEME.inputHeight;
+        this.padding = padding || DEFAULT_THEME.padding;
+    }
+
+    applyStyles(calculator)
+    {
+        const calculatorBox = this.shadowRoot.querySelector('.calculator-box');
+        const buttonBox = this.shadowRoot.querySelector('.calculator-button-box');
+
+        calculatorBox.style.backgroundColor = `${calculator.body.thema ?? '#fff'}`;
+        buttonBox.style.display = 'grid';
+        buttonBox.style.gridTemplateColumns = `repeat(${gridCols}, 1fr)`;
+        buttonBox.style.gridGap = gridGap;
     }
 
     getTemplate()
