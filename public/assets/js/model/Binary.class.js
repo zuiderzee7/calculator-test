@@ -1,5 +1,3 @@
-import { BaseCalculator } from './BaseCalculator.class.js';
-
 export class Binary extends BaseCalculator
 {
     static body() {

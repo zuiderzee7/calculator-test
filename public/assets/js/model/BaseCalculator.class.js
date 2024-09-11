@@ -105,3 +105,5 @@ export class BaseCalculator
         return result.toString();
     }
 }
+
+window.BaseCalculator = BaseCalculator;

@@ -1,5 +1,3 @@
-import { BaseCalculator } from './BaseCalculator.class.js';
-
 export class Decimal extends BaseCalculator
 {
     static body() {
